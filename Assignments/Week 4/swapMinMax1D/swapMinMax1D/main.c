@@ -25,9 +25,9 @@ int main()
 }
 void swapMinMax1D(int ar[], int size)
 {
+    /* Write your code here */
     int min = ar[0], max = ar[0], indexMin = 0, indexMax = 0;
     
-    /* Write your code here */
     for (int i=0; i < size; i++)
     {
         if (ar[i] >= max)
