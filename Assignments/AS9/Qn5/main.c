@@ -93,6 +93,8 @@ Stack* lineEditor(char* line)
     Stack *stack2 = malloc(sizeof(Stack));
     stack->head = NULL;
     stack2->head = NULL;
+    stack->size = 0;
+    stack2->size = 0;
 
     int caps = -1;
     char *c;
@@ -100,30 +102,25 @@ Stack* lineEditor(char* line)
 
     while (*c != '\0')
     {
-        if (*c == '*')
-            pop(stack);
-
-        else if (*c == 92)
-            push(stack, 10);
-
-        else if (*c == '#')
-            while (peek(*stack) != 10)
-                pop(stack);
-
-        else if (*c == '^')
-            caps = -caps;
-
-        else if (isalpha(*c))
-            if (caps == 1)
-            {
-                push(stack, toupper(*c));
-                caps = -caps;
-            }
-            else
-                push(stack, tolower(*c));
-
-        else
-            push(stack, *c);
+        switch(*c)
+        {
+            case '#':while(stack->head!=NULL && peek(*stack)!='\n')
+                         pop(stack);
+                     break;
+            case '^':if(*(c+1)!='*' && *(c+1)!='\\' && *(c+1)!='#'&& *(c+1)!='^')
+                         *(c+1)=toupper(*(c+1));
+                     break;
+            case '*':
+                     if(stack->head!=NULL && peek(*stack)!='\n')
+                        pop(stack);
+                     break;
+            case '\\':
+                     push(stack,'\n');
+                     break;
+            default:
+                     push(stack,*c);
+                     break;
+        }
 
         c++;
     }
